@@ -3,13 +3,13 @@ import numpy as np
 
 if __name__ == '__main__':
     
-    BAG_NAME = './bags/example_rosbag_H3.bag'
+    BAG_NAME = './bags/2020-10-27-13-55-09.bag'
 
     bag = rosbag.Bag(BAG_NAME)
     
-    cam_topic = '/tesla/camera_node/camera_info'
-    line_topic = '/tesla/line_detector_node/segment_list'
-    wheel_topic = '/tesla/wheels_driver_node/wheels_cmd'
+    cam_topic = '/r2d2/camera_node/image/compressed'
+    #line_topic = '/tesla/line_detector_node/segment_list'
+    wheel_topic = '/r2d2/wheels_driver_node/wheels_cmd'
      
 
     # camera topic processing
@@ -47,37 +47,37 @@ if __name__ == '__main__':
 
 
     # line topic processing
-    line_num_messages = bag.get_message_count(line_topic)
+    # line_num_messages = bag.get_message_count(line_topic)
 
-    line_period = np.empty([line_num_messages, 1])
-    i = 0
-    t_old = 0
-    #create numpy array containing period lengths
-    for (topic, msg, t) in bag.read_messages(topics=[line_topic]):
-        t_new = t.to_time()
-        period_val = t_new - t_old
-        line_period[i, 0] = period_val
-        i = i+1
-        t_old = t_new
+    # line_period = np.empty([line_num_messages, 1])
+    # i = 0
+    # t_old = 0
+    # #create numpy array containing period lengths
+    # for (topic, msg, t) in bag.read_messages(topics=[line_topic]):
+    #     t_new = t.to_time()
+    #     period_val = t_new - t_old
+    #     line_period[i, 0] = period_val
+    #     i = i+1
+    #     t_old = t_new
     
-    # remove initial value
-    line_period = np.delete(line_period, [0])
+    # # remove initial value
+    # line_period = np.delete(line_period, [0])
     
-    # use numpy for analysis
-    line_min = np.around(np.min(line_period), 2)
-    line_max = np.around(np.max(line_period), 2)
-    line_avg = np.around(np.average(line_period), 2)
-    line_med = np.around(np.median(line_period), 2)
+    # # use numpy for analysis
+    # line_min = np.around(np.min(line_period), 2)
+    # line_max = np.around(np.max(line_period), 2)
+    # line_avg = np.around(np.average(line_period), 2)
+    # line_med = np.around(np.median(line_period), 2)
 
-    # print analysis to terminal            
-    print(line_topic, ":")
-    print("num_messages: ", line_num_messages)
-    print("period: ")
-    print("min: ", line_min)
-    print("max: ", line_max)
-    print("average: ", line_avg)
-    print("median: ", line_med)
-    print("\n")
+    # # print analysis to terminal            
+    # print(line_topic, ":")
+    # print("num_messages: ", line_num_messages)
+    # print("period: ")
+    # print("min: ", line_min)
+    # print("max: ", line_max)
+    # print("average: ", line_avg)
+    # print("median: ", line_med)
+    # print("\n")
 
     # wheel topic processing
     wheel_num_messages = bag.get_message_count(wheel_topic)
